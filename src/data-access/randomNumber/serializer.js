@@ -4,10 +4,15 @@ const _serializeSingle = (randomNumber) => ({
     size: randomNumber.size,
 });
 
+const _serializeResult = (data) => ({
+    result: data,
+});
+
 const serializer = (data) => {
     if (!data) return null;
-    if (Array.isArray(data)) return data.map(_serializeSingle);
-    return _serializeSingle(data);
+    else if (Array.isArray(data)) data = data.map(_serializeSingle);
+    else data = _serializeSingle(data);
+    return _serializeResult(data);
 };
 
 export default serializer;

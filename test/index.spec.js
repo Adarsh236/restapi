@@ -24,7 +24,8 @@ describe('Test RandomNumber', () => {
                 .get('/randomNumber')
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a('array');
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('result').be.a('array');
                     done();
                 });
         });
@@ -40,9 +41,10 @@ describe('Test RandomNumber', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('id');
-                    res.body.should.have.property('number');
-                    res.body.should.have.property('size').eql(input);
+                    res.body.should.have.property('result');
+                    res.body.result.should.have.property('id');
+                    res.body.result.should.have.property('number');
+                    res.body.result.should.have.property('size').eql(input);
                     done();
                 });
         });
@@ -76,9 +78,10 @@ describe('Test RandomNumber', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('id');
-                    res.body.should.have.property('number');
-                    res.body.should.have.property('size').eql(actual);
+                    res.body.should.have.property('result');
+                    res.body.result.should.have.property('id');
+                    res.body.result.should.have.property('number');
+                    res.body.result.should.have.property('size').eql(actual);
                     done();
                 });
         });
@@ -90,6 +93,27 @@ describe('Test RandomNumber', () => {
         it('it return an error after passing negative number', (done) => {
             const input = -1;
             const actual = 'Please provide valid number greater than 0';
+            chai.request(server)
+                .get('/randomNumber/' + input)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('error').eql(actual);
+                    done();
+                });
+        });
+    });
+    /*
+     * Test the /GET/:id route
+     */
+    describe('/GET/:id RandomNumbers', () => {
+        it('it return an error after passing not possible combination', (done) => {
+            // The random number should be 13 digits in length.
+            const lengthOfRN = 13;
+            // Total unique possible RN to be generated
+            const possibleCombination = Math.pow(2, lengthOfRN);
+            const input = possibleCombination + 1;
+            const actual = 'Please try again later! limit exceeded';
             chai.request(server)
                 .get('/randomNumber/' + input)
                 .end((err, res) => {

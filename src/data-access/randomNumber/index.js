@@ -13,7 +13,7 @@ const generateRandomNumber = async (props) => {
         // The random number should be 13 digits in length.
         const lengthOfRN = 13;
         // Total unique possible RN to be generated
-        const possibleCombination = Math.pow(2, lengthOfRN);
+        const possibleCombination = Math.pow(10, lengthOfRN);
         const isValidNumber = Number.isInteger(numberToBeGenerate);
 
         //Check if given number is not valid or less than 0
@@ -38,7 +38,7 @@ const generateRandomNumber = async (props) => {
 
             // check if new unique RN can be generated
             if (availableRN < numberToBeGenerate) {
-                return { error: 'Please try again later!' };
+                return { error: 'Please try again later! Limit exceeded' };
             }
         }
 
